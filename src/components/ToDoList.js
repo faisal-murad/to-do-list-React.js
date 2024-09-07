@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -15,7 +15,8 @@ const styles = {
         width: '40%',
         borderRadius: '12px',
         margin: 'auto',
-        padding: '20px'
+        padding: '20px', 
+        // marginBottom:'10px'
     },
     btn: {
         height: '40px',
@@ -72,6 +73,10 @@ const ToDoList = () => {
     }
 
     const handleSave = () => {
+
+        console.log('title: ', title);
+        console.log('description: ', description);
+
         // if
         const note = { id: uuidv4(), title: title, description: description };
         addNotes([...notes, note]);
@@ -82,10 +87,8 @@ const ToDoList = () => {
     }
 
     const clear = () => {
-        document.getElementById('input1').value = '';
-        document.getElementById('input2').value = '';
-        document.getElementById('inputU1').value = '';
-        document.getElementById('inputU2').value = '';
+        setTitle('');
+        setDescription('')
     }
 
     const handleCancel = () => {
@@ -95,7 +98,7 @@ const ToDoList = () => {
     }
  
     const handleDelete = (noteid) =>{
-        addNotes(notes.filter((note)=>note.id!=noteid));
+        addNotes(notes.filter((note)=>note.id!==noteid));
     }
 
     const [id, setId]=useState('');
@@ -126,15 +129,16 @@ const ToDoList = () => {
     } 
 
     return (
-        <div style={{ backgroundColor: 'black', width: '100%', height: '100vh' }}>
+        <>
+        <div style={{ backgroundColor: 'black', width: '100%', minHeight:'100vh', paddingBottom:'20px'}}>
             <h1 style={styles.ss} onClick={() => console.log(notes)}>To-Do-List</h1>
             <br />
             <div style={styles.noteContainer}>
                 <button style={styles.btn} onClick={() => handleNewNote()}>Add new Note</button>
                 <div style={styles.addNote} id='addNoteDiv'>
                     <h4 style={{ textAlign: 'center' }}>New Note</h4>
-                    <input id='input1' style={styles.inputNote} type='text' placeholder='Enter note title' onChange={(e) => setTitle(e.target.value)} />
-                    <input id='input2' style={{ ...styles.inputNote, height: '50px' }} type='text' placeholder='Enter note description' onChange={(e) => setDescription(e.target.value)} />
+                    <input id='input1' style={styles.inputNote} type='text' placeholder='Enter note title' value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <input id='input2' style={{ ...styles.inputNote, height: '50px' }} value={description} type='text' placeholder='Enter note description' onChange={(e) => setDescription(e.target.value)} />
                     <div style={{ display: 'flex', justifyContent: 'center', padding: '15px' }}>
                         <button style={{ ...styles.btn2, backgroundColor: 'red' }} onClick={() => handleCancel()}>Cancel</button>
                         <button style={styles.btn2} onClick={() => handleSave()}>Save</button>
@@ -152,21 +156,22 @@ const ToDoList = () => {
                 <div>
                     {notes.map(mynote => {
                         return(
-                        <div style={{ display: 'flex' }}>
+                            <div style={{ display: 'flex', height:'100%' }}>
 
                             <div style={styles.singleNote} key={mynote.id}>
                                 <h3 style={{ padding: '0 0', margin: '0 0' }}>{mynote.title}</h3>
                                 <p style={{ padding: '0 0', margin: '0 0' }}>{mynote.description}</p>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-around', backgroundColor: '#aa9', height: '50px', alignSelf: 'center', marginLeft: '15px', borderRadius: '10px' }}>
-                                <h6 style={{ padding: '0 0', margin: '0 0', color: 'black', cursor: 'pointer' }} onClick={()=>handleUpdate(mynote.id)}>Update</h6>
-                                <h6 style={{ padding: '0 0', margin: '0 0', color: 'red', cursor: 'pointer' }} onClick={()=>handleDelete(mynote.id)}>Delete</h6>
+                            <div style={{ display: 'flex', flexDirection:'column', alignItems: 'center', width: '100%', justifyContent:'space-around', backgroundColor: '#aa9', height: '50px', alignSelf: 'center', marginLeft: '15px', borderRadius: '10px' }}>
+                                <h6 style={{ margin: '0 0', color: 'black', cursor: 'pointer',  padding: '3px', borderRadius:12,  }} onClick={()=>handleUpdate(mynote.id)}>Update</h6>
+                                <h6 style={{margin: '0 0', cursor: 'pointer', backgroundColor:'tomato', color:'white', padding:'3px', borderRadius:12 }} onClick={()=>handleDelete(mynote.id)}>Delete</h6>
                             </div>
                         </div>)
                     })} 
                 </div>
             </div>
         </div>
+                    </>
     )
 }
 export default ToDoList;
